@@ -29,8 +29,9 @@ bot.on('message', async (data) => {
   if (data.type !== 'message' || data.subtype == 'bot_message' || !data.text) return;
 
   const [userId, command, ...params] = split(/ /, data.text);
+  const channel = data.channel;
 
-  dispatcher({ bot, userId, command, params });
+  dispatcher({ bot, channel, userId, command, params });
 });
 
 bot.on('error', (error) => console.log(error));

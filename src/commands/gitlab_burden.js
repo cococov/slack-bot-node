@@ -19,7 +19,7 @@ const getBurden = async (equip) => {
   return result;
 };
 
-export const gitlabBurden = async ({ bot }) => {
+export const gitlabBurden = async ({ bot, channel }) => {
   let ref = firebase.database().ref(`baseOptionsId`);
   ref.on('value', async snapshot => {
     const equip = snapshot.val();
@@ -32,7 +32,7 @@ export const gitlabBurden = async ({ bot }) => {
         return `${previous}\n${current}: ${burden[index].length}`
       }, '');
 
-      bot.postMessageToChannel('general', message);
+      bot.postMessage(channel, message);
     });
   });
 };

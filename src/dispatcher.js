@@ -1,12 +1,12 @@
-import { gitlabBurden } from './commands/gitlab_burden.js';
+import { gitlabBurden } from './commands/index.js';
 
-export const dispatcher = ({ bot, userId, command, params = [] }) => {
+export const dispatcher = ({ bot, channel, userId, command, params = [] }) => {
   switch (command) {
     case 'carga':
-      gitlabBurden({ bot });
+      gitlabBurden({ bot, channel });
       break;
     default:
-      bot.postMessageToChannel('general', `No te entiendo :sad-parrot:`);
+      bot.postMessage(channel, 'No te entiendo :sad-parrot:');
   }
 };
 
