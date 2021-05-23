@@ -1,0 +1,30 @@
+{
+  "name": "slack-bot-node",
+  "version": "1.0.0",
+  "description": "Slack Bot",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cococov/slack-bot-node.git"
+  },
+  "author": "",
+  "license": "GNU General Public License v3.0",
+  "bugs": {
+    "url": "https://github.com/cococov/slack-bot-node/issues"
+  },
+  "homepage": "https://github.com/cococov/slack-bot-node#readme",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "node-fetch": "^2.6.1",
+    "rambda": "^6.7.0",
+    "slackbots": "^1.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}

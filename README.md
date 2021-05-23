@@ -1,2 +1,3 @@
 # slack-bot-node
-Slack Bot
+
+Slack Bot API: https://api.slack.com/apps?new_classic_app=1
