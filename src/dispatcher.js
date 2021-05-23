@@ -1,4 +1,4 @@
-import { gitlabBurden } from './commads/gitlab_burden.js';
+import { gitlabBurden } from './commands/gitlab_burden.js';
 
 export const dispatcher = ({ bot, userId, command, params = [] }) => {
   switch (command) {
