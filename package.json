@@ -19,6 +19,8 @@
   },
   "homepage": "https://github.com/cococov/slack-bot-node#readme",
   "dependencies": {
+    "@firebase/app": "^0.6.22",
+    "@firebase/database": "^0.10.1",
     "dotenv": "^10.0.0",
     "node-fetch": "^2.6.1",
     "rambda": "^6.7.0",
