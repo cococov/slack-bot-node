@@ -30,6 +30,9 @@ export const team = async ({ bot, channel, userId, subcommand:teamName , args })
       case 'create':
         create({ bot, channel, teamName });
         break;
+      case 'help':
+        help({ bot, channel, userId });
+        break;
       default:
         bot.postEphemeral(channel, userId, 'Debes ingresar un comando para equipo.');
     }
