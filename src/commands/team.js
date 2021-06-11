@@ -1,8 +1,8 @@
 import { firebase } from '@firebase/app';
 import '@firebase/database';
-import { status, add, create, remove } from './team/index.js';
+import { status, add, create, remove, assign } from './team/index.js';
 
-export const team = async ({ bot, channel, userId, subcommand:teamName , args }) => {
+export const team = async ({ bot, channel, userId, subcommand: teamName, args }) => {
   if (!teamName) {
     bot.postEphemeral(channel, userId, 'Debes ingresar un equipo.');
     return;
@@ -29,6 +29,9 @@ export const team = async ({ bot, channel, userId, subcommand:teamName , args })
         break;
       case 'create':
         create({ bot, channel, teamName });
+        break;
+      case 'assign':
+        assign({ bot, channel, userId, equip, args });
         break;
       default:
         bot.postEphemeral(channel, userId, 'Debes ingresar un comando para equipo.');
