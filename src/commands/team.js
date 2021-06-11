@@ -1,6 +1,6 @@
 import { firebase } from '@firebase/app';
 import '@firebase/database';
-import { status, add } from './team/index.js';
+import { status, add, remove } from './team/index.js';
 
 export const team = async ({ bot, channel, userId, subcommand:teamName , args }) => {
   if (!teamName) {
@@ -22,6 +22,9 @@ export const team = async ({ bot, channel, userId, subcommand:teamName , args })
         break;
       case 'user-add':
         add({ bot, channel, userId, equip, args });
+        break;
+      case 'remove':
+        remove({ bot, channel, teamName });
         break;
       default:
         bot.postMessage(channel, 'Debes ingresar un comando para equipo.');
