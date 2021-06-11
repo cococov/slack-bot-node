@@ -1,9 +1,8 @@
 import { firebase } from '@firebase/app';
 import '@firebase/database';
-import { status } from './team/index.js';
+import { status, add } from './team/index.js';
 
-export const team = async ({ bot, channel, userId, params: [teamName, subCommand, ...args] }) => {
-  console.log('team')
+export const team = async ({ bot, channel, userId, subcommand:teamName , args }) => {
   if (!teamName) {
     bot.postMessage(channel, 'Debes ingresar un equipo.');
     return;
@@ -16,10 +15,13 @@ export const team = async ({ bot, channel, userId, params: [teamName, subCommand
       bot.postMessage(channel, `El equipo ${teamName} no existe :sad-parrot: Prueba el comando 'team list' para ver la lista de estos.`);
       return;
     }
-
-    switch (subCommand) {
+    const option = Object.keys(args)[0]
+    switch (option) {
       case 'status':
         status({ bot, channel, userId, equip, args });
+        break;
+      case 'user-add':
+        add({ bot, channel, userId, equip, args });
         break;
       default:
         bot.postMessage(channel, 'Debes ingresar un comando para equipo.');

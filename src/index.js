@@ -1,5 +1,4 @@
 import SlackBot from 'slackbots';
-import { split } from 'rambda';
 import { config } from 'dotenv';
 import { firebase } from '@firebase/app';
 import minimist from 'minimist';
@@ -31,9 +30,9 @@ bot.on('message', async (data) => {
   console.log(data)
   const dataFormatter = minimist(data.text.split(/\s/))
   const { _, ...args } = dataFormatter;
-  const { user, channel } = data;
+  const { user: userId , channel } = data;
   const [command, subcommand] = dataFormatter["_"].slice(1)
-  dispatcher({ bot, channel, user, command, subcommand, args });
+  dispatcher({ bot, channel, userId, command, subcommand, args });
 });
 
 bot.on('error', (error) => console.log(error));
