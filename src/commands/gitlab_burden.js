@@ -12,8 +12,7 @@ const getBurden = async (equip) => {
       `${URL}&assignee_id=${member}&not[author_username]=bukhr-tech`,
       { method: 'GET', headers: { 'Authorization': `Bearer ${apiKey}` } }
     );
-    let response = await rawResponse.json();
-    result[index] = response;
+    result[index] = await rawResponse.json();
   }));
 
   return result;
@@ -32,7 +31,7 @@ export const gitlabBurden = async ({ bot, channel }) => {
         return `${previous}\n${current}: ${burden[index].length}`
       }, '');
 
-      bot.postMessage(channel, message);
+      bot.postEphemeral(channel, message);
     });
   });
 };

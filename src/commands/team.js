@@ -4,15 +4,16 @@ import { status, add } from './team/index.js';
 
 export const team = async ({ bot, channel, userId, subcommand:teamName , args }) => {
   if (!teamName) {
-    bot.postMessage(channel, 'Debes ingresar un equipo.');
+    bot.postEphemeral(channel, userId, 'Debes ingresar un equipo.');
     return;
   }
 
   let ref = firebase.database().ref(`teams`).child(teamName);
+
   ref.on('value', async snapshot => {
     const equip = snapshot.val();
     if (!equip) {
-      bot.postMessage(channel, `El equipo ${teamName} no existe :sad-parrot: Prueba el comando 'team list' para ver la lista de estos.`);
+      bot.postEphemeral(channel, userId, `El equipo ${teamName} no existe :sad-parrot: Prueba el comando 'team list' para ver la lista de estos.`);
       return;
     }
     const option = Object.keys(args)[0]
@@ -24,7 +25,7 @@ export const team = async ({ bot, channel, userId, subcommand:teamName , args })
         add({ bot, channel, userId, equip, args });
         break;
       default:
-        bot.postMessage(channel, 'Debes ingresar un comando para equipo.');
+        bot.postEphemeral(channel, userId, 'Debes ingresar un comando para equipo.');
     }
   });
 };

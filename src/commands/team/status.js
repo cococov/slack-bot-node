@@ -10,19 +10,18 @@ const getBurden = async (equip) => {
       `${URL}&assignee_id=${member['id']}&not[author_username]=bukhr-tech`,
       { method: 'GET', headers: { 'Authorization': `Bearer ${apiKey}` } }
     );
-    let response = await rawResponse.json();
-    result[index] = response;
+    result[index] = await rawResponse.json();
   }));
 
   return result;
 };
 
-export const status = async ({ bot, channel, userId, equip, args }) => {
+export const status = async ({ bot, channel, userId, equip }) => {
   const burden = await getBurden(equip['members']);
   const burdens = equip['members'].reduce((previous, current, index) => {
     return `${previous}\n${current['username']}: ${burden[index].length}`
   }, '');
 
   const message = `${burdens}\nHeros: [${equip['heroes'].join(', ')}]`
-  bot.postMessage(channel, message);
+  bot.postEphemeral(channel, userId, message);
 };
