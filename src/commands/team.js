@@ -30,6 +30,9 @@ export const team = async ({ bot, channel, userId, subcommand: teamName, args })
       case 'create':
         create({ bot, channel, teamName });
         break;
+      case 'help':
+        help({ bot, channel, userId });
+        break;
       case 'assign':
         assign({ bot, channel, userId, equip, args });
         break;
