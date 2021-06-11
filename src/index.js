@@ -2,6 +2,7 @@ import SlackBot from 'slackbots';
 import { split } from 'rambda';
 import { config } from 'dotenv';
 import { firebase } from '@firebase/app';
+import minimist from 'minimist';
 import '@firebase/database';
 import dispatcher from './dispatcher.js';
 
@@ -28,11 +29,11 @@ bot.on('open', () => console.log('Bot is Ready!'));
 bot.on('message', async (data) => {
   if (data.type !== 'message' || data.subtype == 'bot_message' || !data.text) return;
   console.log(data)
-  //TODO: mejorar regex
-  const [userId, command, ...params] = split(/ /, data.text);
-  const channel = data.channel;
-
-  dispatcher({ bot, channel, userId, command, params });
+  const dataFormatter = minimist(data.text.split(/\s/))
+  const { _, ...args } = dataFormatter;
+  const { user, channel } = data;
+  const [command, subcommand] = dataFormatter["_"].slice(1)
+  dispatcher({ bot, channel, user, command, subcommand, args });
 });
 
 bot.on('error', (error) => console.log(error));
