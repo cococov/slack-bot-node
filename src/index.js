@@ -27,7 +27,8 @@ bot.on('open', () => console.log('Bot is Ready!'));
 
 bot.on('message', async (data) => {
   if (data.type !== 'message' || data.subtype == 'bot_message' || !data.text) return;
-
+  console.log(data)
+  //TODO: mejorar regex
   const [userId, command, ...params] = split(/ /, data.text);
   const channel = data.channel;
 
