@@ -82,7 +82,13 @@
         "Mera"
       ]
     }
-  }
+  },
+  "projects": [
+    {
+      "id": 3310437,
+      "name": "buk-webapp"
+    }
+  ]
 }
 
 
