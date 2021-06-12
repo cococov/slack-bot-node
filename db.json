@@ -1,6 +1,24 @@
 {
-  "teams": {
-    "hcm": {
+  "projects": [
+    {
+      "id": 3310437,
+      "name": "buk-webapp"
+    },
+    {
+      "id": 24853488,
+      "name": "tech-blog"
+    },
+    {
+      "id": 24507440,
+      "name": "rapanui"
+    }
+  ],
+  "teams": [
+    {
+      "name": "hcm",
+      "heroes": [
+        "JavierAndresVL"
+      ],
       "members": [
         {
           "id": 4946103,
@@ -38,12 +56,13 @@
           "id": 7296752,
           "username": "rcifuentes1"
         }
-      ],
-      "heroes": [
-        "JavierAndresVL"
       ]
     },
-    "rmcl_corp": {
+    {
+      "name": "rmcl_corp",
+      "heroes": [
+        "Mera"
+      ],
       "members": [
         {
           "id": 5251796,
@@ -77,18 +96,11 @@
           "id": 7925076,
           "username": "LU"
         }
-      ],
-      "heroes": [
-        "Mera"
       ]
-    }
-  },
-  "projects": [
+    },
     {
-      "id": 3310437,
-      "name": "buk-webapp"
+      "name": "talento",
+      "teamName": "talento"
     }
   ]
 }
-
-
