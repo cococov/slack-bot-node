@@ -10,5 +10,3 @@ export const help = async ({ bot, channel, userId }) => {
     'project list `@buker project --list` para listar los proyectos',
   );
 };
-
-export default help;

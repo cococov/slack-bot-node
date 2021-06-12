@@ -1,49 +1,56 @@
 import { firebase } from '@firebase/app';
 import '@firebase/database';
-import { status, userAdd, userRemove, create, remove, assign } from './team/index.js';
+import * as actions from './team/index.js';
 
-export default ({ bot, channel, userId, subcommand: teamName, args }) => {
+/**
+ * create action name
+ * @type {string}
+ */
+const CREATE_ACTION = actions.create.name;
 
-  if (!teamName) {
-    bot.postEphemeral(channel, userId, 'upos! Debes ingresar un equipo.');
-    return;
-  }
+/**
+ * object maps cli args vs action names
+ * @type {{"user-add": string, "user-rm": string}}
+ */
+const CLI_MAPPED_ACTIONS = {
+    'user-add': 'userAdd',
+    'user-rm': 'userRemove'
+}
 
-  let ref = firebase.database().ref(`teams`);
-  ref.once('value').then(async snapshot => {
+export default async ({ bot, channel, userId, subcommand: teamName, args }) => {
+
+    if (!teamName) {
+        bot.postEphemeral(channel, userId, 'upos! Debes ingresar un equipo.', null);
+        return;
+    }
+
+    // parse desired action
+    let action = Object.keys(args)[0]
+
+    // transform cli actions to application code actions
+    action = Object.prototype.hasOwnProperty.call(CLI_MAPPED_ACTIONS, action) ? CLI_MAPPED_ACTIONS[action] : action;
+
+    /**
+     * Preload team info based on subcommand
+     */
+    let ref = firebase.database().ref(`teams`);
+    const snapshot = await ref.once('value')
 
     const team = snapshot.val().find(it => it.name === teamName);
-    if (!team) {
-      bot.postEphemeral(channel, userId, `ups! El equipo ${teamName} no existe :sad-parrot: Prueba el comando 'team --list' para ver la lista de estos.`);
-      return;
+    if (!team && action !== CREATE_ACTION) {
+        bot.postEphemeral(channel, userId, `ups! El equipo ${teamName} no existe :sad-parrot: Prueba el comando 'team --list' para ver la lista de estos.`, null);
+        return;
     }
 
-    const option = Object.keys(args)[0]
-
-    switch (option) {
-      case 'status':
-        status({ bot, channel, userId, team, args });
-        break;
-      case 'user-add':
-        userAdd({ bot, channel, userId, teamName, args });
-        break;
-      case 'user-rm':
-        userRemove({ bot, channel, userId, teamName, args });
-        break;
-      case 'remove':
-        remove({ bot, channel, userId, teamName });
-        break;
-      case 'create':
-        create({ bot, channel, userId, teamName });
-        break;
-      case 'help':
-        help({ bot, channel, userId });
-        break;
-      case 'assign':
-        assign({ bot, channel, userId, team, args });
-        break;
-      default:
+    // validate action
+    const actionExists = Object.prototype.hasOwnProperty.call(actions, action);
+    if (!actionExists) {
         bot.postEphemeral(channel, userId, 'ups! Debes ingresar un comando para equipo.', null);
+        return;
     }
-  });
+
+    /**
+     * execute action
+     */
+    actions[action]({ bot, channel, userId, team, teamName, args });
 };
