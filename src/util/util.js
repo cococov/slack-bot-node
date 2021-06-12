@@ -32,3 +32,4 @@ export const getUsersByTeamInFirebase = async (teamName) => {
 }
 
 export const jsonResponseFormatter = text => `\`\`\`${text}\`\`\``;
+export const usernames = usersFirebase => usersFirebase.map(user => user.username)
