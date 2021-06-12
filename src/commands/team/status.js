@@ -14,9 +14,9 @@ const getBurden = async (members = []) => {
     /**
      * prepare gitlab request promises
      */
-    const reqPromises = members.map(async (member, index) => {
+    const reqPromises = members.map((it) => {
 
-        const url = `${GITLAB_BASE_URL}&assignee_id=${member['id']}&not[author_username]=bukhr-tech`;
+        const url = `${GITLAB_BASE_URL}&assignee_id=${it['id']}&not[author_username]=bukhr-tech`;
         const opts = { method: 'GET', headers: { 'Authorization': `Bearer ${GITLAB_API_KEY}` } };
 
         return fetch(url, opts).then(raw => raw.json());

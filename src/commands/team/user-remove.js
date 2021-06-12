@@ -1,17 +1,44 @@
-import { getUsersByTeamInFirebase, getUserInGitlab, usernames } from '../../util/util.js'
 import { firebase } from '@firebase/app';
 import '@firebase/database';
 
-export const userRemove = async ({ bot, channel, userId, teamName, args: { 'user-rm':username } }) => {
-  const usersFirebase = await getUsersByTeamInFirebase(teamName);
-  if(!usernames(usersFirebase).includes(username)) { return bot.postMessage(channel, `ups! ${username} no existe en equipo ${teamName}`);}
+const ERROR_MESSAGE = 'Error agregando usuario :banana:';
 
-  const userGitlab = await getUserInGitlab(username);
-  const formattedUser = (({ id, username }) => ({ id, username }))(userGitlab)
-  const newUsers = usersFirebase.filter(user => Object.values(user)[1] != Object.values(formattedUser)[1])
-  await firebase.database().ref(`teams/${teamName}`).child('members').set(
-    newUsers, (error) => { if (error) {console.log(error);}
-  });
+export const userRemove = async ({ bot, channel, userId, team, teamName, args: { 'user-rm': username } }) => {
 
-  bot.postEphemeral(channel, userId, `Usuario: ${username} removido con éxito de ${teamName}`);
+    /*
+       * Getting users from team
+       */
+    const membersUsernames = team.members?.map(it => it.username) ?? [];
+    if (!membersUsernames.some(u => u === username)) {
+        bot.postMessage(channel, `ups! ${username} no existe en equipo ${teamName}`);
+        return;
+    }
+
+    // excluding desired username from team members
+    team.members = team.members ?? [] // initialize member if it's necessary
+    team.members = team.members.filter(it => it.username !== username);
+
+
+    /*
+     * fetch all teams from DB and replace
+     * @type {Reference}
+     */
+    const tref = firebase.database().ref('teams');
+    const snapshot = await tref.once('value');
+    const allTeams = snapshot.val()
+
+    // replace team
+    const index = allTeams.findIndex(t => t.name === teamName);
+    allTeams[index] = team;
+
+    // store changes in DB
+    try {
+        await tref.set(allTeams)
+    } catch (e) {
+        console.error('An error has occurred: ', JSON.stringify(e))
+        bot.postEphemeral(channel, userId, ERROR_MESSAGE, null);
+        return;
+    }
+
+    bot.postEphemeral(channel, userId, `Usuario: ${username} removido con éxito de ${teamName}`);
 };

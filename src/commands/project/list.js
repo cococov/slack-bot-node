@@ -31,7 +31,7 @@ export const list = async ({ bot, channel, userId }) => {
      * building response
      */
     let message = `Lista de Proyectos (nompre:id):\n`;
-    message += projects.reduce((strBuilder, current, index) => {
+    message += projects.reduce((strBuilder, current) => {
         return strBuilder + `\n${current['name']}: ${current['id']}`
     }, '');
 
