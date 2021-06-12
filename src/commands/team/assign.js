@@ -51,9 +51,9 @@ const getChosen = (burden, equip) => {
 /**
  * @bot team rmcl assign 456
  */
-export const assign = async ({ bot, channel, equip, args: { assign } }) => {
-  const burden = await getBurden(equip['members']);
-  const chosen = getChosen(burden, equip);
+export const assign = async ({ bot, channel, team, args: { assign } }) => {
+  const burden = await getBurden(team['members']);
+  const chosen = getChosen(burden, team);
 
   await putAssign(assign, chosen);
 
