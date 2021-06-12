@@ -8,7 +8,7 @@ export const team = async ({ bot, channel, userId, subcommand: teamName, args })
     return;
   }
 
-  let ref = firebase.database().ref(`teams`).child(teamName);
+  let ref = firebase.database().ref(`teams`);
 
   ref.on('value', async snapshot => {
     const equip = snapshot.val();
