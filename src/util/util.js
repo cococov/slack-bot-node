@@ -30,3 +30,5 @@ export const getUsersByTeamInFirebase = async (teamName) => {
     })
   });
 }
+
+export const jsonResponseFormatter = text => `\`\`\`${text}\`\`\``;
