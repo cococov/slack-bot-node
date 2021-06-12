@@ -1,6 +1,6 @@
 import { firebase } from '@firebase/app';
 import '@firebase/database';
-import { status, add, create, remove, assign } from './team/index.js';
+import { status, userAdd, create, remove, assign } from './team/index.js';
 
 export const team = async ({ bot, channel, userId, subcommand: teamName, args }) => {
   if (!teamName) {
@@ -19,10 +19,10 @@ export const team = async ({ bot, channel, userId, subcommand: teamName, args })
     const option = Object.keys(args)[0]
     switch (option) {
       case 'status':
-        status({ bot, channel, userId, equip, args });
+        status({ bot, channel, userId, teamName, args });
         break;
       case 'user-add':
-        add({ bot, channel, userId, equip, args });
+        userAdd({ bot, channel, userId, teamName, args });
         break;
       case 'remove':
         remove({ bot, channel, teamName });
