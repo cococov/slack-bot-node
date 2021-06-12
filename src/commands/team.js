@@ -1,6 +1,6 @@
 import { firebase } from '@firebase/app';
 import '@firebase/database';
-import { status, userAdd, create, remove, assign } from './team/index.js';
+import { status, userAdd, userRemove, create, remove, assign } from './team/index.js';
 
 export const team = async ({ bot, channel, userId, subcommand: teamName, args }) => {
   if (!teamName) {
@@ -10,7 +10,7 @@ export const team = async ({ bot, channel, userId, subcommand: teamName, args })
 
   let ref = firebase.database().ref(`teams`);
 
-  ref.on('value', async snapshot => {
+  ref.once('value').then(async snapshot => {
     const teams = snapshot.val();
     const team = teams[teamName];
     if (!team) {
@@ -18,12 +18,16 @@ export const team = async ({ bot, channel, userId, subcommand: teamName, args })
       return;
     }
     const option = Object.keys(args)[0]
+    console.log(option)
     switch (option) {
       case 'status':
         status({ bot, channel, userId, team, args });
         break;
       case 'user-add':
         userAdd({ bot, channel, userId, teamName, args });
+        break;
+      case 'user-rm':
+        userRemove({ bot, channel, userId, teamName, args });
         break;
       case 'remove':
         remove({ bot, channel, teamName });
