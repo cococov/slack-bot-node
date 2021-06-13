@@ -1,5 +1,5 @@
 import fetch from 'node-fetch';
-import { any } from 'rambda';
+import { any, find } from 'rambda';
 
 const random = (min, max) => Math.floor((Math.random() * (max - min + 1)) + min);
 
@@ -7,15 +7,16 @@ const putAssign = async (mr, user) => {
   const URL = `https://gitlab.com/api/v4/projects/3310437/merge_requests/${mr}`
   const apiKey = process.env.GITLAB_API_KEY
 
-  await fetch(URL, {
+  const response = await fetch(URL, {
     method: 'PUT',
     body: JSON.stringify({ assignee_id: user }),
     headers: {
       'Authorization': `Bearer ${apiKey}`,
       'Content-Type': 'application/json'
     },
-    'Content-Type': 'application/json'
   });
+
+  return response.status === 200
 };
 
 const getBurden = async (equip) => {
@@ -36,7 +37,7 @@ const getBurden = async (equip) => {
 };
 
 const getChosen = (burden, equip) => {
-  let minCant = 999;
+  let minCant = Infinity;
   const all = burden.reduce((previous, current, index) => {
     if (any(a => a === equip['members'][index]['username'], equip['heroes']) || current > minCant)
       return previous;
@@ -51,11 +52,22 @@ const getChosen = (burden, equip) => {
 /**
  * @bot team rmcl assign 456
  */
-export const assign = async ({ bot, channel, team, args: { assign } }) => {
+export const assign = async ({ bot, userId, channel, team, args: { assign } }) => {
   const burden = await getBurden(team['members']);
   const chosen = getChosen(burden, team);
+  const chosenMemberEmail = find((member) => member['id'] === chosen, team['members'])['email'];
+  const chosenMemberSlackUser = find((member) => member['profile']['email'] === chosenMemberEmail, bot.getUsers()['_value']['members']);
 
-  await putAssign(assign, chosen);
+  const susscess = await putAssign(assign, chosen);
 
-  bot.postMessage(channel, `MR asignado con éxito.`);
+  const message = susscess ? 'MR asignado con éxito.' : 'Hubo problemas al asignar el MR, contacte con un administrador. :sad-parrot:';
+  bot.postEphemeral(channel, userId, message, null);
+
+  if (!!chosenMemberEmail && !!chosenMemberSlackUser) {
+    bot.openIm(chosenMemberSlackUser['id']);
+    const chatId = find((chat) => chat['user'] === chosenMemberSlackUser['id'], bot.ims)['id'];
+    bot.postMessage(chatId, `<@${chosenMemberSlackUser['id']}> se te asignó este <https://gitlab.com/bukhr/buk-webapp/-/merge_requests/${assign}|MR>.`)
+  } else {
+    bot.postEphemeral(channel, userId, 'No se encontró el usuario de slack para notificar.', null);
+  }
 };
