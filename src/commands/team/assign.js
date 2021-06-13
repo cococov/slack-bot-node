@@ -49,14 +49,18 @@ const getChosen = (burden, equip) => {
   return all[random(0, (all.length - 1))]
 };
 
+const findChosenMemberEmailByGitLabId = (chosen, team) => find((member) => member['id'] === chosen, team['members'])['email'];
+const findChosenMemberSlackUserByEmail = (chosenMemberEmail, members) => find((member) => member['profile']['email'] === chosenMemberEmail, members);
+
 /**
  * @bot team rmcl assign 456
  */
 export const assign = async ({ bot, userId, channel, team, args: { assign } }) => {
+  const members = bot.getUsers()['_value']['members'];
   const burden = await getBurden(team['members']);
   const chosen = getChosen(burden, team);
-  const chosenMemberEmail = find((member) => member['id'] === chosen, team['members'])['email'];
-  const chosenMemberSlackUser = find((member) => member['profile']['email'] === chosenMemberEmail, bot.getUsers()['_value']['members']);
+  const chosenMemberEmail = findChosenMemberEmailByGitLabId(chosen, team);
+  const chosenMemberSlackUser = findChosenMemberSlackUserByEmail(chosenMemberEmail, members);
 
   const susscess = await putAssign(assign, chosen);
 
@@ -66,7 +70,9 @@ export const assign = async ({ bot, userId, channel, team, args: { assign } }) =
   if (!!chosenMemberEmail && !!chosenMemberSlackUser) {
     bot.openIm(chosenMemberSlackUser['id']);
     const chatId = find((chat) => chat['user'] === chosenMemberSlackUser['id'], bot.ims)['id'];
-    bot.postMessage(chatId, `<@${chosenMemberSlackUser['id']}> se te asignó este <https://gitlab.com/bukhr/buk-webapp/-/merge_requests/${assign}|MR>.`)
+    const mrLink = `https://gitlab.com/bukhr/buk-webapp/-/merge_requests/${assign}`;
+    bot.postMessage(chatId, `<@${chosenMemberSlackUser['id']}> se te asignó este <${mrLink}|MR>. :gift:`)
+    bot.postMessage(channel, `El <${mrLink}|MR> fue asignado a <@${chosenMemberSlackUser['id']}>.`);
   } else {
     bot.postEphemeral(channel, userId, 'No se encontró el usuario de slack para notificar.', null);
   }
