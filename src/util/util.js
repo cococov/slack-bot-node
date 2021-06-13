@@ -31,5 +31,14 @@ export const getUsersByTeamInFirebase = async (teamName) => {
   });
 }
 
+/**
+ * Check if user is in gitlab
+ * @param username username to check
+ * @returns {Promise<boolean>} True if user exists, otherwise False
+ */
+export const checkGitlabUser = async (username) => {
+  return await getUserInGitlab(username) !== null;
+}
+
 export const jsonResponseFormatter = text => `\`\`\`${text}\`\`\``;
 export const usernames = usersFirebase => usersFirebase.map(user => user.username)

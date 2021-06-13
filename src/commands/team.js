@@ -14,7 +14,9 @@ const CREATE_ACTION = actions.create.name;
  */
 const CLI_MAPPED_ACTIONS = {
     'user-add': 'userAdd',
-    'user-rm': 'userRemove'
+    'user-rm': 'userRemove',
+    'hero-add': 'heroAdd',
+    'hero-rm': 'heroRm',
 }
 
 export default async ({ bot, channel, userId, subcommand: teamName, args }) => {
