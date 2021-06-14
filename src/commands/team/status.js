@@ -1,21 +1,19 @@
 import fetch from 'node-fetch';
 import { jsonResponseFormatter } from '../../util/util.js'
 
-const GITLAB_BASE_URL = 'https://gitlab.com/api/v4/projects/3310437/merge_requests?state=opened';
-const GITLAB_API_KEY = process.env.GITLAB_API_KEY;
-
 /**
  *
  * @param members
  * @returns {Promise<any[]>}
  */
 const getBurden = async (members = []) => {
+    const GITLAB_BASE_URL = 'https://gitlab.com/api/v4/projects/3310437/merge_requests?state=opened';
+    const GITLAB_API_KEY = process.env.GITLAB_API_KEY;
 
     /**
      * prepare gitlab request promises
      */
     const reqPromises = members.map(async (member, index) => {
-
         const url = `${GITLAB_BASE_URL}&assignee_id=${member['id']}&not[author_username]=bukhr-tech`;
         const opts = { method: 'GET', headers: { 'Authorization': `Bearer ${GITLAB_API_KEY}` } };
 
@@ -36,7 +34,6 @@ const getBurden = async (members = []) => {
 };
 
 export const status = async ({ bot, channel, userId, team }) => {
-
     const members = team['members'] ?? [];
     const heroes = team['heroes'] ?? [];
 
