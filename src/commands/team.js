@@ -40,7 +40,7 @@ export default async ({ bot, channel, userId, subcommand: teamName, args }) => {
 
     const team = snapshot.val().find(it => it.name === teamName);
     if (!team && action !== CREATE_ACTION) {
-        bot.postEphemeral(channel, userId, `ups! El equipo ${teamName} no existe :sad-parrot: Prueba el comando 'team --list' para ver la lista de estos.`, null);
+        bot.postEphemeral(channel, userId, `ups! El equipo ${teamName} no existe :sad-parrot: Prueba el comando 'help' para ver la lista de comandos.`, null);
         return;
     }
 
