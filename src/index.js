@@ -26,12 +26,13 @@ const bot = new SlackBot({
 bot.on('open', () => console.log('Bot is Ready!'));
 
 bot.on('message', async (data) => {
-
   if (data.type !== 'message' || data.subtype == 'bot_message' || !data.text) return;
+
   const dataFormatter = minimist(data.text.split(/\s/))
   const { _, ...args } = dataFormatter;
   const { user: userId , channel } = data;
   const [command, subcommand] = dataFormatter["_"].slice(1)
+
   dispatcher({ bot, channel, userId, command, subcommand, args });
 });
 

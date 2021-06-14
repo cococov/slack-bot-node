@@ -22,7 +22,7 @@ const CLI_MAPPED_ACTIONS = {
 export default async ({ bot, channel, userId, subcommand: teamName, args }) => {
 
     if (!teamName) {
-        bot.postEphemeral(channel, userId, 'upos! Debes ingresar un equipo.', null);
+        bot.postEphemeral(channel, userId, 'ups! Debes ingresar un equipo.', null);
         return;
     }
 

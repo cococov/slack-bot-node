@@ -2,7 +2,7 @@ import { firebase } from '@firebase/app'
 import '@firebase/database'
 import { checkGitlabUser } from "../../util/util.js";
 
-const ERROR_MESSAGE = 'Ha occurrido un error :banana:';
+const ERROR_MESSAGE = 'Ha ocurrido un error :banana:';
 
 
 /**
@@ -48,7 +48,7 @@ export const add = async ({ bot, channel, userId, team, teamName, args }) => {
     teams[index] = team;
     await tref.set(teams);
 
-    bot.postEphemeral(channel, userId, `Heroe(s) *${usernames.join(', ')}* agregado a ${team.name} :party-parrot:`, null);
+    bot.postEphemeral(channel, userId, `Héroe(s) *${usernames.join(', ')}* agregado a ${team.name} :party-parrot:`, null);
 }
 
 /**
@@ -93,5 +93,5 @@ export const rm = async ({ bot, channel, userId, team, teamName, args }) => {
     teams[index] = team;
     await tref.set(teams);
 
-    bot.postEphemeral(channel, userId, `Heroe(s) *${usernames.join(', ')}* removido de ${team.name} :party-parrot:`, null);
+    bot.postEphemeral(channel, userId, `Héroe(s) *${usernames.join(', ')}* removido de ${team.name} :party-parrot:`, null);
 }

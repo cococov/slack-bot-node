@@ -1,7 +1,7 @@
 import { firebase } from '@firebase/app';
 import '@firebase/database';
 
-const ERROR_MESSAGE = "NO pudimos eliminar el equipo :banana:";
+const ERROR_MESSAGE = "No pudimos eliminar el equipo :banana:";
 
 export const remove = async ({ bot, channel, userId, teamName }) => {
 
@@ -17,9 +17,9 @@ export const remove = async ({ bot, channel, userId, teamName }) => {
     try {
         await tref.set(filteredTeams);
     } catch (e) {
-        console.error('An error has occured: ', JSON.stringify(e))
+        console.error('An error has occurred: ', JSON.stringify(e))
         bot.postEphemeral(channel, userId, ERROR_MESSAGE);
     }
 
-    bot.postMessage(channel, `Equipo: [${teamName}] eliminado con exito :alien:`);
+    bot.postMessage(channel, `Equipo: [${teamName}] eliminado con éxito :alien:`);
 };
