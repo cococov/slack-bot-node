@@ -8,6 +8,7 @@ export const help = async ({ bot, channel, userId }) => {
     '`@buker team #nombre_team --create` para crear equipo\n' +
     '`@buker team #nombre_team --remove` para remover equipo\n' +
     '`@buker team #nombre_team --user-add #nombre_user` para crear usuarios a un equipo\n' +
-    'project list `@buker project --list` para listar los proyectos',
+    '`@buker team #nombre_team --user-rm #nombre_user` para remover usuarios a un equipo\n' +
+    '`@buker project --list` para listar los proyectos',
   );
 };
