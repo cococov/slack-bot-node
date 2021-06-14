@@ -7,6 +7,7 @@ export const userAdd = async ({ bot, channel, userId, teamName, args: { 'user-ad
   if(!(typeof userGitlab === 'object')) {
     return bot.postMessage(channel, `ups! ${username} no existe en gitlab`);
   }
+  console.log(teamName)
   const usersFirebase = await getUsersByTeamInFirebase(teamName);
   if(usernames(usersFirebase).includes(username)) {
     return bot.postMessage(channel, `ups! ${username} ya existe en equipo ${teamName}`);

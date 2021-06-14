@@ -7,7 +7,6 @@ export const checkUserExistsInFirebase = async (teamName, username) => {
   return new Promise( async (resolve, _) => {
     const users = await getUsersByTeamInFirebase(teamName);
     const usernames = users["members"].map(user => user["username"])
-    console.log(usernames)
     resolve(usernames.includes(username))
   })
 }
@@ -26,7 +25,8 @@ export const getUsersByTeamInFirebase = async (teamName) => {
   return new Promise((resolve, _) => {
     ref(`teams`).on('value', async snapshot => {
       const result = snapshot.val();
-      resolve(result[teamName]["members"])
+      const resultFilteredByTeam = result.filter(obj => obj['name'] === teamName)[0]
+      resolve(resultFilteredByTeam["members"])
     })
   });
 }
