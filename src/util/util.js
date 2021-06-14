@@ -21,6 +21,15 @@ export const getUserInGitlab = async (username) => {
   })
 }
 
+export const getTeamsInFirebase = async (_) => {
+  return new Promise((resolve, _) => {
+    ref(`teams`).on('value', async snapshot => {
+      const result = snapshot.val();
+      resolve(result);
+    })
+  });
+}
+
 export const getUsersByTeamInFirebase = async (teamName) => {
   return new Promise((resolve, _) => {
     ref(`teams`).on('value', async snapshot => {
