@@ -2,18 +2,30 @@ import { getUserInGitlab, getUsersByTeamInFirebase, usernames } from '../../util
 import { firebase } from '@firebase/app';
 import '@firebase/database';
 
-export const userAdd = async ({ bot, channel, userId, team, teamName, args: { 'user-add':username } }) => {
-  const userGitlab = await getUserInGitlab(username);
-  if(!(typeof userGitlab === 'object')) {
-    return bot.postMessage(channel, `ups! ${username} no existe en gitlab`);
+export const userAdd = async ({ bot, channel, userId, team, teamName, args: { 'user-add': username, email, 'gitlab-id': gitlabId } }) => {
+  if (!username || !email) {
+    bot.postEphemeral(channel, userId, `Debe ingresar un usuario y email como mínimo.`);
+    return;
+  }
+
+  let id = gitlabId;
+  if (!gitlabId) {
+    const userGitlab = await getUserInGitlab(username);
+    if (!(typeof userGitlab === 'object')) {
+      bot.postMessage(channel, `ups! ${username} no existe en gitlab`);
+      return;
+    } else {
+      id = userGitlab['id'];
+    }
   }
 
   const usersFirebase = (await getUsersByTeamInFirebase(teamName)) || [];
-  if(usernames(usersFirebase).includes(username)) {
-    return bot.postMessage(channel, `ups! ${username} ya existe en equipo ${teamName}`);
+  if (usernames(usersFirebase).includes(username)) {
+    bot.postMessage(channel, `ups! ${username} ya existe en equipo ${teamName}`);
+    return;
   }
 
-  const formattedUser = (({ id, username }) => ({ id, username }))(userGitlab)
+  const formattedUser = { id, username, email }
   usersFirebase.push(formattedUser)
 
   const tref = firebase.database().ref('teams')
