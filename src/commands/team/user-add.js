@@ -1,6 +1,9 @@
 import { getUserInGitlab, getUsersByTeamInFirebase, usernames } from '../../util/util.js'
 import { firebase } from '@firebase/app';
 import '@firebase/database';
+import { split } from 'rambda';
+
+const formatEmail = (str) => split('<mailto:', split('|', str)[0])[1];
 
 export const userAdd = async ({ bot, channel, userId, team, teamName, args: { 'user-add': username, email, 'gitlab-id': gitlabId } }) => {
   if (!username || !email) {
@@ -25,7 +28,7 @@ export const userAdd = async ({ bot, channel, userId, team, teamName, args: { 'u
     return;
   }
 
-  const formattedUser = { id, username, email }
+  const formattedUser = { id, username, email: formatEmail(email) }
   usersFirebase.push(formattedUser)
 
   const tref = firebase.database().ref('teams')
