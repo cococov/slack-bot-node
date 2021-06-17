@@ -108,3 +108,5 @@ dist
 
 # package-lock
 package-lock.json
+
+docker-compose.yaml
