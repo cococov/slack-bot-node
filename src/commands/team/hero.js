@@ -1,6 +1,5 @@
-import { firebase } from '@firebase/app'
-import '@firebase/database'
-import { checkGitlabUser } from "../../util/util.js";
+import { firebase } from '@firebase/app';
+import '@firebase/database';
 
 const ERROR_MESSAGE = 'Ha ocurrido un error :banana:';
 
@@ -22,10 +21,10 @@ export const add = async ({ bot, channel, userId, team, teamName, args }) => {
     // parsing username from args
     const usernames = Object.values(args);
 
-    // check user should be a gitlab users and should be a memberteam
-    if (!usernames.every(u => checkGitlabUser(u) && team.members?.find(tm => tm.username === u))) {
+    // check user should be a team member
+    if (!usernames.every(u => team.members?.find(tm => tm.username === u))) {
         bot.postEphemeral(channel, userId,
-            'El usuario debe ser un usuario valido de gitlab y ser parte del equipo :banana:', null);
+            'El usuario debe ser parte del equipo :banana:', null);
         return;
     }
 

@@ -4,7 +4,7 @@ import { firebase } from '@firebase/app';
 const ref = key => firebase.database().ref(key);
 
 export const checkUserExistsInFirebase = async (teamName, username) => {
-  return new Promise( async (resolve, _) => {
+  return new Promise(async (resolve, _) => {
     const users = await getUsersByTeamInFirebase(teamName);
     const usernames = users["members"].map(user => user["username"])
     resolve(usernames.includes(username))
@@ -15,7 +15,7 @@ export const getUserInGitlab = async (username) => {
   return new Promise(async (resolve, _) => {
     const apiKey = process.env.GITLAB_API_KEY
     const URL = `https://gitlab.com/api/v4/users?username=${username}`
-    const rawResponse = await fetch(`${URL}`, { method: 'GET', headers: { 'Authorization': `Bearer ${apiKey}` } } );
+    const rawResponse = await fetch(`${URL}`, { method: 'GET', headers: { 'Authorization': `Bearer ${apiKey}` } });
     const response = await rawResponse.json();
     resolve(response[0]);
   })

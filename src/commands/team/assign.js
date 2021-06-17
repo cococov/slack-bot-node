@@ -22,14 +22,14 @@ const putAssign = async (mr, user) => {
 const getBurden = async (equip) => {
   const URL = 'https://gitlab.com/api/v4/projects/3310437/merge_requests?state=opened'
   const apiKey = process.env.GITLAB_API_KEY
-  let result = [];
+  const result = [];
 
   await Promise.all(equip.map(async (member, index) => {
-    let rawResponse = await fetch(
+    const rawResponse = await fetch(
       `${URL}&assignee_id=${member['id']}&not[author_username]=bukhr-tech`,
       { method: 'GET', headers: { 'Authorization': `Bearer ${apiKey}` } }
     );
-    let response = await rawResponse.json();
+    const response = await rawResponse.json();
     result[index] = response.length;
   }));
 
@@ -39,15 +39,17 @@ const getBurden = async (equip) => {
 const getChosen = (burden, equip) => {
   let minCant = Infinity;
   const all = burden.reduce((previous, current, index) => {
-    if (any(a => a === equip['members'][index]['username'], equip['heroes']) || current > minCant)
+    if (current === undefined || isHero(equip, index) || current > minCant)
       return previous;
-    let others = (minCant != current) ? [] : previous;
+    const others = (minCant != current) ? [] : previous;
     minCant = current;
     return [...others, equip['members'][index]['id']]
   }, []);
 
   return all[random(0, (all.length - 1))]
 };
+
+const isHero = (equip, index) => any(hero => hero === equip['members'][index]['username'], equip['heroes']);
 
 const findChosenMemberEmailByGitLabId = (chosen, team) => find((member) => member['id'] === chosen, team['members'])['email'];
 const findChosenMemberSlackUserByEmail = (chosenMemberEmail, members) => find((member) => member['profile']['email'] === chosenMemberEmail, members);
@@ -62,9 +64,9 @@ export const assign = async ({ bot, userId, channel, team, args: { assign } }) =
   const chosenMemberEmail = findChosenMemberEmailByGitLabId(chosen, team);
   const chosenMemberSlackUser = findChosenMemberSlackUserByEmail(chosenMemberEmail, members);
 
-  const susscess = await putAssign(assign, chosen);
+  const success = await putAssign(assign, chosen);
 
-  const message = susscess ? 'MR asignado con éxito.' : 'Hubo problemas al asignar el MR, contacte con un administrador. :sad-parrot:';
+  const message = success ? 'MR asignado con éxito.' : 'Hubo problemas al asignar el MR, contacte con un administrador. :sad-parrot:';
   bot.postEphemeral(channel, userId, message, null);
 
   if (!!chosenMemberEmail && !!chosenMemberSlackUser) {
