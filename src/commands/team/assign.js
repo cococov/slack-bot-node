@@ -26,7 +26,7 @@ const getBurden = async (equip) => {
 
   await Promise.all(equip.map(async (member, index) => {
     const rawResponse = await fetch(
-      `${URL}&assignee_id=${member['id']}&not[author_username]=bukhr-tech`,
+      `${URL}&reviewer_id=${member['id']}&not[author_username]=bukhr-tech`,
       { method: 'GET', headers: { 'Authorization': `Bearer ${apiKey}` } }
     );
     const response = await rawResponse.json();
